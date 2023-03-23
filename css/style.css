@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: rgb(234, 234, 234);
+}
+main {
+  display: flex;
+  flex-direction: column;
+  font-family: "M PLUS Rounded 1c", sans-serif;
+}
+section {
+  width: 552px;
+  margin: 0 auto;
+}
