@@ -1,5 +1,8 @@
-/* .todos-display__container {
+.todos-display__items {
   width: 100%;
   height: 50px;
   background-color: white;
-} */
+}
+.todos-display__list {
+  display: flex;
+}
