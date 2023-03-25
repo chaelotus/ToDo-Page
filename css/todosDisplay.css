@@ -2,7 +2,13 @@
   width: 100%;
   height: 50px;
   background-color: white;
+  padding: 10px;
 }
 .todos-display__list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.todos-display__check {
   display: flex;
 }
