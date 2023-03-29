@@ -6,25 +6,28 @@ const createItem = (content) => {
   const ul = document.createElement("ul");
   ul.classList.add("todos-display__items");
 
-  const div_list = document.createElement("div");
-  div_list.classList.add("todos-display__list");
+  const li_list = document.createElement("li");
+  li_list.classList.add("todos-display__list");
 
-  const div_check = document.createElement("div");
-  div_check.classList.add("todos-display__check");
+  const randomnum = Math.random();
+  const label_check = document.createElement("label");
+  label_check.htmlFor = randomnum;
 
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
-  const li = document.createElement("li");
-  li.classList.add("todos-display__items-item");
-  li.textContent = content;
-  div_check.append(checkbox, li);
+
+  checkbox.id = randomnum;
+  const span = document.createElement("span");
+  span.classList.add("todos-display__items-text");
+  span.textContent = content;
+  label_check.append(checkbox, span);
   const deleteicon = document.createElement("i");
   deleteicon.classList.add("fa-solid");
   deleteicon.classList.add("fa-xmark");
 
   todosDisplay.append(ul);
-  ul.append(div_list);
-  div_list.append(div_check, deleteicon);
+  ul.append(li_list);
+  li_list.append(label_check, deleteicon);
 };
 $form.onkeydown = (event) => {
   if (event.keyCode === 13) {
