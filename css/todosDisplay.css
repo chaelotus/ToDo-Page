@@ -39,7 +39,17 @@ input[type="checkbox"]::after {
 input[type="checkbox"]:checked::after {
   color: var(--color-green);
   content: "✓";
+  transition: all 1s ease-in-out;
 }
 input[type="checkbox"]:checked {
   border: 1px solid var(--color-green);
+  transition: all 1s ease-in-out;
+}
+.fa-xmark {
+  color: var(--color-xicon);
+  margin-right: 10px;
+  opacity: 0;
+}
+.todos-display__items:hover .fa-xmark {
+  opacity: 1;
 }

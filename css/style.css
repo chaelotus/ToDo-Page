@@ -7,6 +7,7 @@
   --color-gray: rgba(0, 0, 0, 0.2);
   --color-green: #5dc2af;
   --color-title-color: rgba(175, 47, 47, 0.15);
+  --color-xicon: #b97072;
 }
 body {
   background-color: rgb(234, 234, 234);
