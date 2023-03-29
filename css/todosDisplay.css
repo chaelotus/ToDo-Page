@@ -19,7 +19,7 @@ input[type="checkbox"] {
   height: 1.563rem;
   margin-right: 25px;
   appearance: none;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--color-gray);
   border-radius: 50%;
   cursor: pointer;
   position: relative;
@@ -32,9 +32,9 @@ input[type="checkbox"]::after {
 }
 
 input[type="checkbox"]:checked::after {
-  color: #5dc2af;
+  color: var(--color-green);
   content: "✓";
 }
 input[type="checkbox"]:checked {
-  border: 1px solid #5dc2af;
+  border: 1px solid var(--color-green);
 }

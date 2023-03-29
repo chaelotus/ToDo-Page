@@ -2,7 +2,7 @@
   font-size: 100px;
   margin: 34px 0px 27px 0px;
   text-align: center;
-  color: rgba(175, 47, 47, 0.15);
+  color: var(--color-title-color);
   font-weight: 100;
 }
 .todos-input__input {
@@ -14,13 +14,13 @@
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   outline: none;
-  color: rgba(0, 0, 0, 0.2);
+  color: var(--color-gray);
   font-weight: 100;
   font-family: "M PLUS Rounded 1c", sans-serif;
 }
 .todos-input__input::-webkit-input-placeholder {
   font-style: italic;
   font-weight: 100;
-  color: rgba(0, 0, 0, 0.2);
+  color: var(--color-gray);
   font-family: "M PLUS Rounded 1c", sans-serif;
 }
