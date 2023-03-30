@@ -1,11 +1,14 @@
 const $form = document.querySelector(".todos-input__form");
 const todosDisplay = document.querySelector(".todos-display__container");
 const $input = document.querySelector(".todos-input__input");
+const todosFilter = document.querySelector(".todos-filter");
+const itemcount = document.querySelector(".todos-filter__itemcount");
 //li 만들어서 ul에 포함시키기
+let count = 0;
 const createItem = (content) => {
   const ul = document.createElement("ul");
   ul.classList.add("todos-display__items");
-
+  count++;
   const li_list = document.createElement("li");
   li_list.classList.add("todos-display__list");
 
@@ -28,13 +31,22 @@ const createItem = (content) => {
   todosDisplay.append(ul);
   ul.append(li_list);
   li_list.append(label_check, deleteicon);
+
+  if (count > 0) {
+    todosFilter.style.display = "flex";
+    if (count > 1) {
+      itemcount.textContent = `${count} items left`;
+    }
+  }
 };
+
 $form.onkeydown = (event) => {
   if (event.keyCode === 13) {
     //엔터키
     event.preventDefault();
     const inputValue = event.target.value;
     createItem(inputValue);
+    console.log();
     $input.value = "";
   }
 };
