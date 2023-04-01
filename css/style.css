@@ -11,7 +11,7 @@
   --color-xicon: #b97072;
 }
 body {
-  background-color: rgb(234, 234, 234);
+  background-color: #f5f5f5;
 }
 
 main {
@@ -19,6 +19,7 @@ main {
   flex-direction: column;
   font-family: "M PLUS Rounded 1c", sans-serif;
   font-weight: 100;
+  margin-bottom: 200px;
 }
 section {
   width: 552px;
@@ -27,4 +28,9 @@ section {
 ul,
 li {
   list-style: none;
+  background-color: #ffffff;
+}
+button {
+  background-color: #ffffff;
+  border: none;
 }

@@ -1,16 +1,19 @@
 const $form = document.querySelector(".todos-input__form");
 const todosDisplay = document.querySelector(".todos-display__container");
+const $ul = document.querySelector(".todos-display__items");
 const $input = document.querySelector(".todos-input__input");
 const todosFilter = document.querySelector(".todos-filter");
 const itemcount = document.querySelector(".todos-filter__itemcount");
-//li 만들어서 ul에 포함시키기
+//localstorage array
+let todositem = [];
+
+//item count
 let count = 0;
+
 const createItem = (content) => {
-  const ul = document.createElement("ul");
-  ul.classList.add("todos-display__items");
-  count++;
   const li_list = document.createElement("li");
   li_list.classList.add("todos-display__list");
+  count++;
 
   const randomnum = Math.random();
   const label_check = document.createElement("label");
@@ -28,9 +31,13 @@ const createItem = (content) => {
   deleteicon.classList.add("fa-solid");
   deleteicon.classList.add("fa-xmark");
 
-  todosDisplay.append(ul);
-  ul.append(li_list);
+  $ul.append(li_list);
   li_list.append(label_check, deleteicon);
+
+  console.log(li_list.textContent);
+  todositem.push({ id: Date.now(), text: li_list.textContent });
+
+  localStorage.setItem("todos", JSON.stringify(todositem));
 
   if (count > 0) {
     todosFilter.style.display = "flex";
@@ -39,10 +46,16 @@ const createItem = (content) => {
     }
   }
 };
+if (localStorage.length > 0) {
+  let setLocalItem = JSON.parse(localStorage.getItem("todos"));
 
+  setLocalItem.map((item) => {
+    createItem(item.text);
+  });
+}
 $form.onkeydown = (event) => {
   if (event.keyCode === 13) {
-    //엔터키
+    //enter key
     event.preventDefault();
     const inputValue = event.target.value;
     createItem(inputValue);
