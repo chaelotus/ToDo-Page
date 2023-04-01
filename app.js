@@ -4,6 +4,7 @@ const $ul = document.querySelector(".todos-display__items");
 const $input = document.querySelector(".todos-input__input");
 const todosFilter = document.querySelector(".todos-filter");
 const itemcount = document.querySelector(".todos-filter__itemcount");
+
 //localstorage array
 let todositem = [];
 
@@ -34,9 +35,10 @@ const createItem = (content) => {
   $ul.append(li_list);
   li_list.append(label_check, deleteicon);
 
-  console.log(li_list.textContent);
-  todositem.push({ id: Date.now(), text: li_list.textContent });
-
+  //localstorage setitem
+  let dateId = Date.now();
+  todositem.push({ id: dateId, text: li_list.textContent });
+  li_list.id = dateId;
   localStorage.setItem("todos", JSON.stringify(todositem));
 
   if (count > 0) {
@@ -45,6 +47,24 @@ const createItem = (content) => {
       itemcount.textContent = `${count} items left`;
     }
   }
+
+  deleteicon.onclick = (event) => {
+    //console.log(event.target.parentElement);
+
+    todositem = todositem.filter((x) => {
+      console.log(x.id === event.target.parentElement.id);
+      return String(x.id) !== event.target.parentElement.id;
+    });
+    localStorage.setItem("todos", JSON.stringify(todositem));
+
+    itemcount.textContent =
+      count > 1 ? `${--count} items left` : `${--count} item left`;
+    event.target.parentElement.remove();
+    console.log(count);
+    if (count === 0) {
+      todosFilter.style.display = "none";
+    }
+  };
 };
 if (localStorage.length > 0) {
   let setLocalItem = JSON.parse(localStorage.getItem("todos"));
@@ -53,13 +73,14 @@ if (localStorage.length > 0) {
     createItem(item.text);
   });
 }
+
 $form.onkeydown = (event) => {
   if (event.keyCode === 13) {
     //enter key
     event.preventDefault();
     const inputValue = event.target.value;
     createItem(inputValue);
-    console.log();
+
     $input.value = "";
   }
 };
