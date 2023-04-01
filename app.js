@@ -5,9 +5,12 @@ const $input = document.querySelector(".todos-input__input");
 const todosFilter = document.querySelector(".todos-filter");
 const itemcount = document.querySelector(".todos-filter__itemcount");
 
+const AllBtn = document.querySelector(".All");
+const ActiveBtn = document.querySelector(".Active");
+const Completed = document.querySelector(".Completed");
 //localstorage array
 let todositem = [];
-
+let filtertodos = [];
 //item count
 let count = 0;
 
@@ -26,11 +29,12 @@ const createItem = (content) => {
   checkbox.classList.add("inputCheck");
 
   checkbox.addEventListener("change", (event) => {
+    let checkboxParent = event.target.parentElement.parentElement;
     if (event.target.checked) {
-      checkbox.classList.add("checked");
+      checkboxParent.classList.add("checked");
       count--;
     } else {
-      checkbox.classList.remove("checked");
+      checkboxParent.classList.remove("checked");
       count++;
     }
     itemcount.textContent =
@@ -63,7 +67,6 @@ const createItem = (content) => {
 
   deleteicon.onclick = (event) => {
     todositem = todositem.filter((x) => {
-      console.log(x.id === event.target.parentElement.id);
       return String(x.id) !== event.target.parentElement.id;
     });
     localStorage.setItem("todos", JSON.stringify(todositem));
@@ -76,7 +79,32 @@ const createItem = (content) => {
       todosFilter.style.display = "none";
     }
   };
+
+  filtertodos.push(li_list);
+  console.log(filtertodos);
+
+  AllBtn.onclick = () => {
+    filtertodos.map((x) => (x.style.display = "flex"));
+  };
+
+  ActiveBtn.onclick = () => {
+    filtertodos
+      .filter((x) => x.className.includes("checked"))
+      .map((x) => (x.style.display = "none"));
+    filtertodos
+      .filter((x) => !x.className.includes("checked"))
+      .map((x) => (x.style.display = "flex"));
+  };
+  Completed.onclick = () => {
+    filtertodos
+      .filter((x) => !x.className.includes("checked"))
+      .map((x) => (x.style.display = "none"));
+    filtertodos
+      .filter((x) => x.className.includes("checked"))
+      .map((x) => (x.style.display = "flex"));
+  };
 };
+
 if (localStorage.length > 0) {
   let setLocalItem = JSON.parse(localStorage.getItem("todos"));
 
