@@ -22,8 +22,21 @@ const createItem = (content) => {
 
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
-
   checkbox.id = randomnum;
+  checkbox.classList.add("inputCheck");
+
+  checkbox.addEventListener("change", (event) => {
+    if (event.target.checked) {
+      checkbox.classList.add("checked");
+      count--;
+    } else {
+      checkbox.classList.remove("checked");
+      count++;
+    }
+    itemcount.textContent =
+      count > 1 ? `${count} items left` : `${count} item left`;
+  });
+
   const span = document.createElement("span");
   span.classList.add("todos-display__items-text");
   span.textContent = content;
@@ -49,8 +62,6 @@ const createItem = (content) => {
   }
 
   deleteicon.onclick = (event) => {
-    //console.log(event.target.parentElement);
-
     todositem = todositem.filter((x) => {
       console.log(x.id === event.target.parentElement.id);
       return String(x.id) !== event.target.parentElement.id;
@@ -60,7 +71,7 @@ const createItem = (content) => {
     itemcount.textContent =
       count > 1 ? `${--count} items left` : `${--count} item left`;
     event.target.parentElement.remove();
-    console.log(count);
+
     if (count === 0) {
       todosFilter.style.display = "none";
     }
@@ -75,8 +86,11 @@ if (localStorage.length > 0) {
 }
 
 $form.onkeydown = (event) => {
+  //enter key
   if (event.keyCode === 13) {
-    //enter key
+    if ($input.value === "") {
+      return;
+    }
     event.preventDefault();
     const inputValue = event.target.value;
     createItem(inputValue);
