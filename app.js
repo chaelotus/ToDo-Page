@@ -13,10 +13,11 @@ let todositem = [];
 let filtertodos = [];
 //item count
 let count = 0;
-
 const createItem = (content) => {
   const li_list = document.createElement("li");
   li_list.classList.add("todos-display__list");
+  let dateId = Date.now();
+  li_list.id = dateId;
   count++;
 
   const randomnum = Math.random();
@@ -28,6 +29,7 @@ const createItem = (content) => {
   checkbox.id = randomnum;
   checkbox.classList.add("inputCheck");
 
+  //checkbox change
   checkbox.addEventListener("change", (event) => {
     let checkboxParent = event.target.parentElement.parentElement;
     if (event.target.checked) {
@@ -39,6 +41,11 @@ const createItem = (content) => {
     }
     itemcount.textContent =
       count > 1 ? `${count} items left` : `${count} item left`;
+
+    localStorage.setItem(
+      li_list.id,
+      checkboxParent.classList.contains("checked")
+    );
   });
 
   const span = document.createElement("span");
@@ -53,9 +60,8 @@ const createItem = (content) => {
   li_list.append(label_check, deleteicon);
 
   //localstorage setitem
-  let dateId = Date.now();
+  //let fixid = dateId;
   todositem.push({ id: dateId, text: li_list.textContent });
-  li_list.id = dateId;
   localStorage.setItem("todos", JSON.stringify(todositem));
 
   if (count > 0) {
@@ -65,15 +71,24 @@ const createItem = (content) => {
     }
   }
 
+  //delete click
   deleteicon.onclick = (event) => {
     todositem = todositem.filter((x) => {
+      console.log(x.id, event.target.parentElement.id);
       return String(x.id) !== event.target.parentElement.id;
     });
+    console.log(todositem);
+    //localStorage.removeItem(event.target.parentElement.id);
     localStorage.setItem("todos", JSON.stringify(todositem));
 
-    itemcount.textContent =
-      count > 1 ? `${--count} items left` : `${--count} item left`;
     event.target.parentElement.remove();
+    if (!event.target.parentElement.classList.contains("checked")) {
+      itemcount.textContent =
+        count > 1 ? `${--count} items left` : `${--count} item left`;
+    } else if (event.target.parentElement.classList.contains("checked")) {
+      itemcount.textContent =
+        count > 1 ? `${count} items left` : `${count} item left`;
+    }
 
     if (count === 0) {
       todosFilter.style.display = "none";
@@ -115,6 +130,14 @@ if (localStorage.length > 0) {
 
 $form.onkeydown = (event) => {
   //enter key
+  // window.onload = () => {
+  //   const checklist = querySelectorAll(".todos-display__list");
+  //   console.log(checklist);
+  //   checklist.forEach(li=>
+  //     let setcheck = localStorage.getItem()
+  //     if(li.)
+  //     )
+  // };
   if (event.keyCode === 13) {
     if ($input.value === "") {
       return;
@@ -122,7 +145,6 @@ $form.onkeydown = (event) => {
     event.preventDefault();
     const inputValue = event.target.value;
     createItem(inputValue);
-
     $input.value = "";
   }
 };
