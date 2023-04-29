@@ -32,18 +32,17 @@ input[type="checkbox"] {
   cursor: pointer;
   position: relative;
 }
-input[type="checkbox"]::after {
+
+input[type="checkbox"]:checked::after {
   font-size: 25px;
   position: absolute;
   left: 5px;
   bottom: -7px;
-}
-
-input[type="checkbox"]:checked::after {
   color: var(--color-green);
   content: "✓";
   transition: all 1s ease-in-out;
 }
+
 input[type="checkbox"]:checked {
   border: 1px solid var(--color-green);
   transition: all 1s ease-in-out;
@@ -53,6 +52,7 @@ input[type="checkbox"]:checked + .todos-display__items-text {
   color: var(--color-check-text);
   transition: all 0.3s ease-in-out;
 }
+
 .fa-xmark {
   color: var(--color-xicon);
   margin-right: 10px;

@@ -1,150 +1,136 @@
-const $form = document.querySelector(".todos-input__form");
+const form = document.querySelector(".todos-input__form");
 const todosDisplay = document.querySelector(".todos-display__container");
-const $ul = document.querySelector(".todos-display__items");
-const $input = document.querySelector(".todos-input__input");
+const ul = document.querySelector(".todos-display__items");
+const input = document.querySelector(".todos-input__input");
 const todosFilter = document.querySelector(".todos-filter");
 const itemcount = document.querySelector(".todos-filter__itemcount");
 
 const AllBtn = document.querySelector(".All");
 const ActiveBtn = document.querySelector(".Active");
-const Completed = document.querySelector(".Completed");
-//localstorage array
-let todositem = [];
-let filtertodos = [];
-//item count
-let count = 0;
-const createItem = (content) => {
-  const li_list = document.createElement("li");
-  li_list.classList.add("todos-display__list");
-  let dateId = Date.now();
-  li_list.id = dateId;
-  count++;
+const CompletedBtn = document.querySelector(".Completed");
 
-  const randomnum = Math.random();
-  const label_check = document.createElement("label");
-  label_check.htmlFor = randomnum;
+//localstorage data
+let todos = [];
+let filter = "all";
+let count;
+const updateItemCount = (count) => {
+  count = todos.filter((todo) => !todo.checked).length;
+  itemcount.textContent =
+    count > 1 ? `${count} items left` : `${count} item left`;
+};
 
+const saveTodosLocalStorage = () => {
+  localStorage.setItem("todos", JSON.stringify(todos));
+};
+const createToDoElement = ({ id, text, checked }) => {
+  // li 생성
+  const li = document.createElement("li");
+  li.classList.add("todos-display__list");
+  li.id = id;
+
+  // checkbox 생성
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
-  checkbox.id = randomnum;
   checkbox.classList.add("inputCheck");
-
-  //checkbox change
-  checkbox.addEventListener("change", (event) => {
-    let checkboxParent = event.target.parentElement.parentElement;
-    if (event.target.checked) {
-      checkboxParent.classList.add("checked");
-      count--;
-    } else {
-      checkboxParent.classList.remove("checked");
-      count++;
-    }
-    itemcount.textContent =
-      count > 1 ? `${count} items left` : `${count} item left`;
-
-    localStorage.setItem(
-      li_list.id,
-      checkboxParent.classList.contains("checked")
-    );
-  });
+  checkbox.checked = checked;
+  checkbox.id = "myCheckbox";
 
   const span = document.createElement("span");
   span.classList.add("todos-display__items-text");
-  span.textContent = content;
-  label_check.append(checkbox, span);
-  const deleteicon = document.createElement("i");
-  deleteicon.classList.add("fa-solid");
-  deleteicon.classList.add("fa-xmark");
+  span.textContent = text;
 
-  $ul.append(li_list);
-  li_list.append(label_check, deleteicon);
+  const label = document.createElement("label");
+  label.append(checkbox, span);
+  label.htmlFor = "myCheckbox";
 
-  //localstorage setitem
-  //let fixid = dateId;
-  todositem.push({ id: dateId, text: li_list.textContent });
-  localStorage.setItem("todos", JSON.stringify(todositem));
+  // x icon 생성
+  const deleteIcon = document.createElement("i");
+  deleteIcon.classList.add("fa-solid", "fa-xmark");
 
-  if (count > 0) {
-    todosFilter.style.display = "flex";
-    if (count > 1) {
-      itemcount.textContent = `${count} items left`;
-    }
-  }
+  ul.append(li);
+  li.append(label, deleteIcon);
 
-  //delete click
-  deleteicon.onclick = (event) => {
-    todositem = todositem.filter((x) => {
-      console.log(x.id, event.target.parentElement.id);
-      return String(x.id) !== event.target.parentElement.id;
-    });
-    console.log(todositem);
-    //localStorage.removeItem(event.target.parentElement.id);
-    localStorage.setItem("todos", JSON.stringify(todositem));
-
-    event.target.parentElement.remove();
-    if (!event.target.parentElement.classList.contains("checked")) {
-      itemcount.textContent =
-        count > 1 ? `${--count} items left` : `${--count} item left`;
-    } else if (event.target.parentElement.classList.contains("checked")) {
-      itemcount.textContent =
-        count > 1 ? `${count} items left` : `${count} item left`;
-    }
-
-    if (count === 0) {
-      todosFilter.style.display = "none";
-    }
-  };
-
-  filtertodos.push(li_list);
-  console.log(filtertodos);
-
-  AllBtn.onclick = () => {
-    filtertodos.map((x) => (x.style.display = "flex"));
-  };
-
-  ActiveBtn.onclick = () => {
-    filtertodos
-      .filter((x) => x.className.includes("checked"))
-      .map((x) => (x.style.display = "none"));
-    filtertodos
-      .filter((x) => !x.className.includes("checked"))
-      .map((x) => (x.style.display = "flex"));
-  };
-  Completed.onclick = () => {
-    filtertodos
-      .filter((x) => !x.className.includes("checked"))
-      .map((x) => (x.style.display = "none"));
-    filtertodos
-      .filter((x) => x.className.includes("checked"))
-      .map((x) => (x.style.display = "flex"));
-  };
+  updateItemCount();
+  return li;
 };
 
-if (localStorage.length > 0) {
-  let setLocalItem = JSON.parse(localStorage.getItem("todos"));
+const renderTodos = () => {
+  ul.innerHTML = "";
+  const active = todos.filter((todo) => !todo.checked);
+  console.log(active);
+  todos
+    .filter((todo) => {
+      if (filter === "all") {
+        return true;
+      }
+      return filter === "completed" ? todo.checked : !todo.checked;
+    })
+    .forEach((todo) => {
+      const todoElement = createToDoElement(todo);
+      todoElement.style.display = "flex";
+      updateItemCount();
+    });
+  if (todos.length > 0) {
+    todosFilter.style.display = "flex";
+  } else {
+    todosFilter.style.display = "none";
+  }
+};
+const addTodo = (text) => {
+  const todo = {
+    id: Date.now(),
+    text,
+    checked: false,
+  };
+  todos.push(todo);
+  saveTodosLocalStorage();
+  renderTodos();
+};
+const deleteTodo = (id) => {
+  todos = todos.filter((todo) => todo.id !== id);
+  saveTodosLocalStorage();
+  renderTodos();
+};
 
-  setLocalItem.map((item) => {
-    createItem(item.text);
-  });
+form.addEventListener("keydown", (event) => {
+  if (event.keyCode === 13) {
+    const inputValue = input.value.trim();
+    if (inputValue) {
+      event.preventDefault();
+      addTodo(inputValue);
+      input.value = "";
+    }
+  }
+});
+AllBtn.addEventListener("click", () => {
+  filter = "all";
+  renderTodos();
+});
+ActiveBtn.addEventListener("click", () => {
+  filter = "active";
+  renderTodos();
+});
+CompletedBtn.addEventListener("click", () => {
+  filter = "completed";
+  renderTodos();
+});
+ul.addEventListener("click", (event) => {
+  const li = event.target.closest("li");
+  if (event.target.classList.contains("fa-xmark")) {
+    deleteTodo(Number(li.id));
+  }
+});
+ul.addEventListener("change", (event) => {
+  const li = event.target.closest("li");
+  const todo = todos.find((todo) => todo.id === Number(li.id));
+  todo.checked = event.target.checked;
+  saveTodosLocalStorage();
+  updateItemCount();
+});
+
+// 로컬스토리지에 값이 있으면 새로고침해도 유지
+if (localStorage.getItem("todos")) {
+  todos = JSON.parse(localStorage.getItem("todos"));
 }
 
-$form.onkeydown = (event) => {
-  //enter key
-  // window.onload = () => {
-  //   const checklist = querySelectorAll(".todos-display__list");
-  //   console.log(checklist);
-  //   checklist.forEach(li=>
-  //     let setcheck = localStorage.getItem()
-  //     if(li.)
-  //     )
-  // };
-  if (event.keyCode === 13) {
-    if ($input.value === "") {
-      return;
-    }
-    event.preventDefault();
-    const inputValue = event.target.value;
-    createItem(inputValue);
-    $input.value = "";
-  }
-};
+renderTodos();
