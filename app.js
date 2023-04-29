@@ -56,7 +56,7 @@ const createToDoElement = ({ id, text, checked }) => {
 
 const renderTodos = () => {
   ul.innerHTML = "";
-  const active = todos.filter((todo) => !todo.checked);
+
   console.log(active);
   todos
     .filter((todo) => {
