@@ -5,6 +5,12 @@ localStorage를 활용하여 페이지 새로고침 후에도 유지가 됩니�
 
 <br/>
 
+🔗 <a href='https://lotusstudy.tistory.com/115' >관련 포스팅-input checkbox 꾸미기</a>
+<br/>
+🔗 <a href='https://lotusstudy.tistory.com/117'>관련 포스팅-리팩토링</a>
+
+<br/>
+
 ### ✅ 결과 화면
 
 **1. todo 생성**
